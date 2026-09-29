@@ -7,6 +7,7 @@ from tkinter import scrolledtext
 
 from commands import execute
 from errors import ExitRequested, ShellError
+from script import read_script
 from shell_parser import parse_line
 
 WINDOW_SIZE = "800x500"
@@ -49,6 +50,34 @@ class EmulatorApp:
         self.output.configure(state="disabled")
         self.output.see(tk.END)
 
+    def start(self, config):
+        """Вывести параметры запуска и выполнить стартовый скрипт."""
+        self.write("[debug] Параметры запуска:")
+        self.write(f"[debug]   vfs    = {config.vfs}")
+        self.write(f"[debug]   script = {config.script}")
+        if config.script:
+            self.run_script(config.script)
+
+    def run_script(self, path):
+        """Выполнить стартовый скрипт построчно.
+
+        Строки с ошибками пропускаются, о каждой ошибке сообщается
+        с указанием файла и номера строки.
+        """
+        try:
+            lines = read_script(path)
+        except ShellError as error:
+            self.write(f"Ошибка: {error}")
+            return
+        self.write(f"[script] Выполнение {path}")
+        for number, line in enumerate(lines, start=1):
+            if not line.strip():
+                continue
+            self.write(self.prompt + line)
+            if not self.run_line(line, f"{path}:{number}: "):
+                return
+        self.write("[script] Готово")
+
     def on_enter(self, _event):
         """Обработать Enter: выполнить каждую введённую строку."""
         text = self.entry.get()
@@ -58,9 +87,10 @@ class EmulatorApp:
             if not self.run_line(line):
                 break
 
-    def run_line(self, line):
+    def run_line(self, line, where=""):
         """Разобрать и выполнить строку, вывести результат или ошибку.
 
+        where - префикс места ошибки (файл:строка) для скриптов.
         Возвращает False, если эмулятор нужно закрыть.
         """
         try:
@@ -72,7 +102,7 @@ class EmulatorApp:
             self.root.destroy()
             return False
         except ShellError as error:
-            self.write(f"Ошибка: {error}")
+            self.write(f"Ошибка: {where}{error}")
             return True
         if result:
             self.write(result)

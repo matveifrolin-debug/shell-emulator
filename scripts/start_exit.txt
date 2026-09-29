@@ -1,0 +1,4 @@
+# Стартовый скрипт, завершающий работу эмулятора
+ls
+exit
+ls this-line-is-never-executed

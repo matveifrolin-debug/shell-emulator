@@ -1,0 +1,8 @@
+# Стартовый скрипт с ошибками: ошибочные строки пропускаются
+ls -a
+unknown_command arg
+cd a b
+ls "unclosed
+cd /tmp
+exit 1
+ls $NOSUCHVAR

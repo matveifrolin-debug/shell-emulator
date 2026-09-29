@@ -42,7 +42,7 @@ def parse_line(line, env=None):
     if env is None:
         env = get_environment()
     try:
-        words = shlex.split(line)
+        words = shlex.split(line, comments=True)
     except ValueError as error:
         raise ShellError(f"parse error: {error}") from error
     words = [expand_variables(word, env) for word in words]

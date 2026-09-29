@@ -2,13 +2,16 @@
 
 import tkinter as tk
 
+from config import parse_args
 from gui import EmulatorApp
 
 
 def main():
-    """Создать окно эмулятора и запустить цикл обработки событий."""
+    """Разобрать параметры, создать окно и запустить цикл событий."""
+    config = parse_args()
     root = tk.Tk()
-    EmulatorApp(root)
+    app = EmulatorApp(root)
+    root.after(0, app.start, config)
     root.mainloop()
 
 
