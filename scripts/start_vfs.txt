@@ -1,0 +1,10 @@
+# Стартовый скрипт этапа 3: команды всех этапов и работа с VFS
+vfs-info
+ls
+ls -l $HOME
+cd /home/user
+cd ${USERNAME}
+cd a b
+vfs-info extra
+unknown_command
+ls "unclosed

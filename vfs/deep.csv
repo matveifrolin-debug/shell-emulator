@@ -1,0 +1,13 @@
+path,type,content
+/bin,dir,
+/bin/tool.bin,file,iVBORw0KGgoAAQL/
+/etc,dir,
+/etc/hostname,file,ZW11bGF0b3I=
+/home,dir,
+/home/user,dir,
+/home/user/notes.txt,file,YXBwbGUKYXBwbGUKYmFuYW5hCmJhbmFuYQphcHBsZQ==
+/home/user/projects,dir,
+/home/user/projects/shell,dir,
+/home/user/projects/shell/main.py,file,cHJpbnQoJ2hpJyk=
+/home/user/empty.txt,file,
+/tmp,dir,

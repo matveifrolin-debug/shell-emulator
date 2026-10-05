@@ -5,10 +5,11 @@ import socket
 import tkinter as tk
 from tkinter import scrolledtext
 
-from commands import execute
+from commands import ShellContext, execute
 from errors import ExitRequested, ShellError
 from script import read_script
 from shell_parser import parse_line
+from vfs import VfsError, load_vfs
 
 WINDOW_SIZE = "800x500"
 FONT = ("Consolas", 11)
@@ -27,6 +28,7 @@ class EmulatorApp:
     def __init__(self, root):
         """Создать виджеты окна и привязать обработчик Enter."""
         self.root = root
+        self.context = ShellContext()
         self.prompt = f"{get_user_host()}$ "
         root.title(f"Эмулятор - [{get_user_host()}]")
         root.geometry(WINDOW_SIZE)
@@ -55,8 +57,22 @@ class EmulatorApp:
         self.write("[debug] Параметры запуска:")
         self.write(f"[debug]   vfs    = {config.vfs}")
         self.write(f"[debug]   script = {config.script}")
+        if config.vfs:
+            self.load_vfs(config.vfs)
         if config.script:
             self.run_script(config.script)
+
+    def load_vfs(self, path):
+        """Загрузить VFS из CSV-файла и сообщить о результате."""
+        try:
+            self.context.vfs = load_vfs(path)
+        except VfsError as error:
+            self.write(f"Ошибка загрузки VFS: {error}")
+            return
+        dirs, files = self.context.vfs.stats()
+        name = self.context.vfs.name
+        self.write(f"[vfs] Загружена VFS '{name}': "
+                   f"{dirs} каталогов, {files} файлов")
 
     def run_script(self, path):
         """Выполнить стартовый скрипт построчно.
@@ -97,7 +113,7 @@ class EmulatorApp:
             parsed = parse_line(line)
             if parsed is None:
                 return True
-            result = execute(*parsed)
+            result = execute(*parsed, self.context)
         except ExitRequested:
             self.root.destroy()
             return False
