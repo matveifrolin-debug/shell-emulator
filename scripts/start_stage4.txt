@@ -1,0 +1,37 @@
+# Стартовый скрипт этапа 4: ls, cd, du, uniq (VFS deep.csv)
+# --- ls ---
+ls
+ls -l
+ls /home/user
+ls -l /home/user/notes.txt
+ls /etc /tmp
+ls /nope
+ls -x
+# --- cd ---
+cd /home/user
+ls
+cd projects/shell
+ls -l
+cd ..
+cd ../..
+cd
+cd /home/user/notes.txt
+cd /nope
+cd a b
+# --- du ---
+du
+du -s /home
+du -a /home/user
+du /etc/hostname
+du -as /
+du /nope
+# --- uniq ---
+uniq /home/user/notes.txt
+uniq -c /home/user/notes.txt
+uniq -d /home/user/notes.txt
+uniq -u /home/user/notes.txt
+uniq /home/user/empty.txt
+uniq
+uniq /home
+uniq /bin/tool.bin
+uniq /home/user/notes.txt extra

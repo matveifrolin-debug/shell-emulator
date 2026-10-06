@@ -155,3 +155,27 @@ def load_vfs(path):
         except VfsError as error:
             raise VfsError(f"{path}:{number}: {error}") from error
     return vfs
+
+def resolve_path(cwd, path):
+    """Преобразовать путь относительно cwd в абсолютный путь VFS.
+
+    Обрабатываются ".", ".." и повторяющиеся "/".
+    """
+    full = path if path.startswith("/") else f"{cwd}/{path}"
+    parts = []
+    for part in full.split("/"):
+        if part in ("", "."):
+            continue
+        if part == "..":
+            if parts:
+                parts.pop()
+            continue
+        parts.append(part)
+    return "/" + "/".join(parts)
+
+
+def node_size(node):
+    """Вернуть размер узла в байтах (для каталога - сумму вложенных)."""
+    if not node.is_dir:
+        return len(node.data)
+    return sum(node_size(child) for child in node.children.values())

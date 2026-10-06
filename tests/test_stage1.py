@@ -48,9 +48,10 @@ class ParserTest(unittest.TestCase):
 class CommandsTest(unittest.TestCase):
     """Проверки команд-заглушек."""
 
-    def test_ls_stub(self):
-        """ls выводит своё имя и аргументы."""
-        self.assertEqual(execute("ls", ["-a"]), "ls: args=['-a']")
+    def test_ls_without_vfs(self):
+        """ls без загруженной VFS - ошибка."""
+        with self.assertRaises(ShellError):
+            execute("ls", [])
 
     def test_cd_too_many(self):
         """cd с двумя аргументами - ошибка."""

@@ -1,10 +1,10 @@
-"""Команды эмулятора. ls и cd пока являются заглушками."""
+"""Реестр команд эмулятора и общие команды (exit, vfs-info)."""
 
 from dataclasses import dataclass
 
 from errors import ExitRequested, ShellError
+from fs_commands import cmd_cd, cmd_du, cmd_ls, cmd_uniq
 
-MAX_CD_ARGS = 1
 INDENT = "  "
 
 
@@ -14,23 +14,6 @@ class ShellContext:
 
     vfs: object = None
     cwd: str = "/"
-
-
-def format_stub(name, args):
-    """Сформировать вывод заглушки: имя команды и её аргументы."""
-    return f"{name}: args={args}"
-
-
-def cmd_ls(args, _ctx):
-    """Заглушка ls: печатает своё имя и аргументы."""
-    return format_stub("ls", args)
-
-
-def cmd_cd(args, _ctx):
-    """Заглушка cd: печатает своё имя и аргументы."""
-    if len(args) > MAX_CD_ARGS:
-        raise ShellError("cd: too many arguments")
-    return format_stub("cd", args)
 
 
 def cmd_exit(args, _ctx):
@@ -66,6 +49,8 @@ def cmd_vfs_info(args, ctx):
 COMMANDS = {
     "ls": cmd_ls,
     "cd": cmd_cd,
+    "du": cmd_du,
+    "uniq": cmd_uniq,
     "exit": cmd_exit,
     "vfs-info": cmd_vfs_info,
 }

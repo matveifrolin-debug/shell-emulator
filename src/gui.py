@@ -29,8 +29,8 @@ class EmulatorApp:
         """Создать виджеты окна и привязать обработчик Enter."""
         self.root = root
         self.context = ShellContext()
-        self.prompt = f"{get_user_host()}$ "
-        root.title(f"Эмулятор - [{get_user_host()}]")
+        self.user_host = get_user_host()
+        root.title(f"Эмулятор - [{self.user_host}]")
         root.geometry(WINDOW_SIZE)
         self.output = scrolledtext.ScrolledText(
             root, state="disabled", font=FONT,
@@ -44,6 +44,10 @@ class EmulatorApp:
         self.entry.pack(fill="x")
         self.entry.bind("<Return>", self.on_enter)
         self.entry.focus_set()
+
+    def prompt(self):
+        """Сформировать приглашение с текущим каталогом VFS."""
+        return f"{self.user_host}:{self.context.cwd}$ "
 
     def write(self, text):
         """Добавить строку текста в область вывода."""
@@ -89,7 +93,7 @@ class EmulatorApp:
         for number, line in enumerate(lines, start=1):
             if not line.strip():
                 continue
-            self.write(self.prompt + line)
+            self.write(self.prompt() + line)
             if not self.run_line(line, f"{path}:{number}: "):
                 return
         self.write("[script] Готово")
@@ -99,7 +103,7 @@ class EmulatorApp:
         text = self.entry.get()
         self.entry.delete(0, tk.END)
         for line in text.splitlines() or [""]:
-            self.write(self.prompt + line)
+            self.write(self.prompt() + line)
             if not self.run_line(line):
                 break
 
