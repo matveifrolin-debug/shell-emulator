@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 
+from cp_command import cmd_cp
 from errors import ExitRequested, ShellError
 from fs_commands import cmd_cd, cmd_du, cmd_ls, cmd_uniq
 
@@ -51,6 +52,7 @@ COMMANDS = {
     "cd": cmd_cd,
     "du": cmd_du,
     "uniq": cmd_uniq,
+    "cp": cmd_cp,
     "exit": cmd_exit,
     "vfs-info": cmd_vfs_info,
 }

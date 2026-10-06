@@ -1,0 +1,33 @@
+# Стартовый скрипт этапа 5: cp (VFS deep.csv, изменения только в памяти)
+# --- копирование файла ---
+cp /etc/hostname /tmp
+ls -l /tmp
+cp /home/user/notes.txt /tmp/fruits.txt
+uniq -c /tmp/fruits.txt
+cp /etc/hostname /tmp/fruits.txt
+uniq /tmp/fruits.txt
+# --- несколько файлов в каталог ---
+cp /home/user/notes.txt /home/user/empty.txt /etc
+ls /etc
+# --- рекурсивное копирование каталога ---
+cp -r /home/user/projects /tmp
+ls /tmp/projects/shell
+cp -r /bin /tmp/bin_copy
+du -a /tmp
+# --- относительные пути ---
+cd /home/user
+cp notes.txt notes_backup.txt
+ls
+cd
+# --- ошибки ---
+cp
+cp /etc/hostname
+cp /nope /tmp
+cp /home /tmp
+cp -r /home /home/user
+cp /etc/hostname /etc
+cp /etc/hostname /nope/dir/file
+cp /etc/hostname /home/user/notes.txt /etc/hostname
+cp -r /bin /etc/hostname
+cp -x /etc/hostname /tmp
+vfs-info
